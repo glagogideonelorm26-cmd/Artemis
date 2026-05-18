@@ -1,19 +1,130 @@
-Engineering materials
-====
+# Artemis — WRO 2026 Future Engineers Autonomous Driving
 
-This repository contains engineering materials of a self-driven vehicle's model participating in the WRO Future Engineers competition in the season 2025.
+**Team:** UGhana Robotics  
+**Challenge:** Open Challenge (Autonomous Lap Completion with Parking)
 
-## Content
+This repository contains the autonomous driving simulation and control system for the WRO 2026 Future Engineers competition.
 
-* `t-photos` contains 2 photos of the team (an official one and one funny photo with all team members)
-* `v-photos` contains 6 photos of the vehicle (from every side, from top and bottom)
-* `video` contains the video.md file with the link to a video where driving demonstration exists
-* `schemes` contains one or several schematic diagrams in form of JPEG, PNG or PDF of the electromechanical components illustrating all the elements (electronic components and motors) used in the vehicle and how they connect to each other.
-* `src` contains code of control software for all components which were programmed to participate in the competition
-* `models` is for the files for models used by 3D printers, laser cutting machines and CNC machines to produce the vehicle elements. If there is nothing to add to this location, the directory can be removed.
-* `other` is for other files which can be used to understand how to prepare the vehicle for the competition. It may include documentation how to connect to a SBC/SBM and upload files there, datasets, hardware specifications, communication protocols descriptions etc. If there is nothing to add to this location, the directory can be removed.
+## Overview
 
-## Introduction
+Artemis is an autonomous vehicle designed to complete the WRO 2026 Open Challenge. The system uses:
+- **PD wall-following control** for precision lateral centering
+- **Real-time sensor fusion** (ToF + IMU + color detection)
+- **Adaptive corner navigation** for varying track widths (600mm–1000mm)
+- **State machine** for robust multi-phase driving
 
-_This part must be filled by participants with the technical clarifications about the code: which modules the code consists of, how they are related to the electromechanical components of the vehicle, and what is the process to build/compile/upload the code to the vehicle’s controllers._
+## Directory Structure
 
+```
+artemis/
+├── README.md                    # This file
+├── src/                         # Control software
+│   ├── README.md
+│   ├── config.py               # Global constants and configuration
+│   ├── controller.py           # State machine and PD control
+│   ├── robot.py                # Robot model and sensor simulation
+│   ├── track.py                # Track layout and collision detection
+│   ├── test_pd_tuning.py       # Comprehensive test suite
+│   └── sim_viewer.py           # Real-time Pygame visualizer
+├── schemes/                     # Electromechanical diagrams
+├── models/                      # CAD models for 3D printing
+├── v-photos/                    # Vehicle photos
+├── t-photos/                    # Team photos
+└── video/                       # Competition video link
+```
+
+## Quick Start
+
+### Requirements
+- Python 3.8+
+- pygame (for visualization)
+
+### Run Simulation
+```bash
+cd src
+python sim_viewer.py
+```
+
+### Run Tests
+```bash
+cd src
+python test_pd_tuning.py
+```
+
+## Simulation Architecture
+
+### Core Modules
+
+1. **config.py** — Global constants
+   - Control parameters (PD gains, speed limits)
+   - Track dimensions and sensor specs
+   - Challenge-specific settings
+
+2. **robot.py** — Robot model
+   - 2D kinematic simulation
+   - Sensor simulation (ToF, IMU, color detection)
+   - Motor command processing
+
+3. **track.py** — Track representation
+   - Outer/inner walls and sections
+   - Color line detection zones
+   - Collision detection
+
+4. **controller.py** — Autonomous control
+   - State machine (WALL_FOLLOWING, CORNER_TURN, PARKING, etc.)
+   - PD wall-following algorithm
+   - Pillar avoidance and corner navigation
+   - Three-point turn and parking maneuvers
+
+5. **test_pd_tuning.py** — Validation suite
+   - 108 test configurations covering:
+     - Centered placements
+     - Lateral offset tolerances (±100mm)
+     - Heading entry errors (±12°)
+     - Mixed offset + angle worst-cases
+
+6. **sim_viewer.py** — Real-time visualizer
+   - Live track rendering
+   - Robot trajectory visualization
+   - Sensor ray display
+   - Real-time telemetry (position, heading, state, sensors)
+
+## Performance
+
+**Current Status:** 182/208 tests passing (87.5% success rate)
+- Phase 1 (straight-line): 20/20 ✓
+- Phase 2 (corner exit): 16/16 ✓
+- Phase 3 (off-center): 57/60 (3 failures on 1000mm wide with negative offset)
+- Phase 4 (offset+angle): 16/16 ✓
+- Phase 5 (corner entry angle): 73/96 (23 failures on 1000mm wide at ±5° to ±12°)
+
+## Known Challenges
+
+1. **Wide track corner entry** — Non-cardinal heading entry on 1000mm tracks requires tuning
+2. **Negative lateral offset** — Left-wall pressure on wide tracks shows systematic bias
+
+## Controls (Simulator)
+
+| Key | Action |
+|-----|--------|
+| SPACE | Pause/Resume |
+| R | Restart current config |
+| ←/→ | Previous/Next config |
+| A | Auto-play all 108 tests |
+| T | Toggle sensor rays |
+| P | Toggle path trail |
+| G | Toggle grid |
+| L | Open config list |
+| S | Screenshot |
+| Q | Quit |
+
+## Next Steps
+
+- [ ] Fine-tune PD gains for wide-track corner entry
+- [ ] Optimize heading correction during corner turns
+- [ ] Complete obstacle challenge implementation
+- [ ] Hardware integration and real-world testing
+
+---
+
+*Last updated: 2026-05-18*
