@@ -20,12 +20,16 @@ artemis/
 ├── README.md                    # This file
 ├── src/                         # Control software
 │   ├── README.md
-│   ├── config.py               # Global constants and configuration
-│   ├── controller.py           # State machine and PD control
-│   ├── robot.py                # Robot model and sensor simulation
-│   ├── track.py                # Track layout and collision detection
-│   ├── test_pd_tuning.py       # Comprehensive test suite
-│   └── sim_viewer.py           # Real-time Pygame visualizer
+│   ├── open-challenge-sim/      # Open challenge simulation
+│   │   ├── config.py            # Constants and PD gains
+│   │   ├── controller.py        # State machine and control
+│   │   ├── robot.py             # Robot model and sensors
+│   │   ├── track.py             # Track and collision detection
+│   │   ├── sim_viewer.py        # Real-time Pygame visualizer
+│   │   ├── test_pd_tuning.py    # 108-config test suite
+│   │   └── test_headless.py     # Headless integration test
+│   ├── obstacle-sim/            # Obstacle challenge sim (planned)
+│   └── robot/                   # Physical robot code (planned)
 ├── schemes/                     # Electromechanical diagrams
 ├── models/                      # CAD models for 3D printing
 ├── v-photos/                    # Vehicle photos
@@ -41,13 +45,13 @@ artemis/
 
 ### Run Simulation
 ```bash
-cd src
+cd src/open-challenge-sim
 python sim_viewer.py
 ```
 
 ### Run Tests
 ```bash
-cd src
+cd src/open-challenge-sim
 python test_pd_tuning.py
 ```
 
