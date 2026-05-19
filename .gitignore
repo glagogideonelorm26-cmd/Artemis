@@ -19,3 +19,4 @@ sim_backup/
 *.zip
 files/
 docs/
+.claude/

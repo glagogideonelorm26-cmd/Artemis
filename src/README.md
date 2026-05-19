@@ -114,7 +114,7 @@ With adaptive gains based on track width:
 
 ### State Machine
 
-1. **STARTING** → Initialize, begin driving
+1. **STARTING** → Initialize, store starting ToF readings, begin driving
 2. **WALL_FOLLOWING** → PD centering and line detection
 3. **CORNER_TURN** → Navigate corners with heading correction
 4. **PILLAR_AVOIDANCE** → Detect and avoid obstacles
