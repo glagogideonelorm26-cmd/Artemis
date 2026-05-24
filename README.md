@@ -2,7 +2,7 @@
 
 **Team:** UGhana Robotics  
 **Challenge:** Open Challenge (Autonomous Lap Completion with Parking)
-
+ 
 This repository contains the autonomous driving simulation and control system for the WRO 2026 Future Engineers competition.
 
 ## Overview
